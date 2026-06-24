@@ -1,0 +1,15 @@
+# Runtime / uploads
+public/uploads/*
+!public/uploads/.gitkeep
+storage/*
+!storage/.gitkeep
+
+# Environment & secrets
+.env
+.env.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
