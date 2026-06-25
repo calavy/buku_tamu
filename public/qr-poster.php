@@ -1,9 +1,10 @@
 <?php
 require_once __DIR__ . '/../src/Database.php';
 require_once __DIR__ . '/../src/HijriDate.php';
+require_once __DIR__ . '/../src/SettingsModel.php';
 require_once __DIR__ . '/../src/helpers.php';
 
-$app = require __DIR__ . '/../config/app.php';
+$app = app_config();
 $scanUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')
     . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . base_url('/');
 ?>
@@ -25,9 +26,12 @@ $scanUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : '
             <!-- Header -->
             <div class="bg-hero text-white text-center py-10 px-8 relative">
                 <div class="relative z-10">
-                    <div class="inline-flex w-16 h-16 rounded-2xl bg-white/10 backdrop-blur border border-white/20 items-center justify-center mb-4">
-                        <i data-lucide="book-open" class="w-8 h-8 text-amber-300"></i>
-                    </div>
+                    <?php
+                    $brandSize = 'lg';
+                    $brandIcon = 'book-open';
+                    $brandMargin = 'mb-4';
+                    require __DIR__ . '/../views/partials/pesantren_brand.php';
+                    ?>
                     <h1 class="font-display text-2xl md:text-3xl font-bold"><?= htmlspecialchars($app['pesantren_name']) ?></h1>
                     <p class="text-emerald-200 text-sm mt-2 font-medium tracking-widest uppercase">Buku Tamu Digital</p>
                 </div>

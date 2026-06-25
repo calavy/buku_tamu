@@ -51,9 +51,12 @@ $scanUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : '
                 <div id="printArea" class="print-area size-poster bg-white rounded-2xl shadow-xl overflow-hidden border" data-size="poster">
                     <div class="bg-hero text-white text-center py-8 px-6 relative">
                         <div class="relative z-10">
-                            <div class="inline-flex w-14 h-14 rounded-2xl bg-white/10 border border-white/20 items-center justify-center mb-3 mx-auto">
-                                <i data-lucide="book-open" class="w-7 h-7 text-amber-300"></i>
-                            </div>
+                            <?php
+                            $brandSize = 'lg';
+                            $brandIcon = 'book-open';
+                            $brandMargin = 'mb-3 mx-auto';
+                            require __DIR__ . '/../partials/pesantren_brand.php';
+                            ?>
                             <h1 class="font-display text-2xl font-bold print-title"><?= e($app['pesantren_name']) ?></h1>
                             <p class="text-emerald-200 text-xs mt-1 tracking-widest uppercase">Buku Tamu Digital</p>
                         </div>

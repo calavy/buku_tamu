@@ -114,10 +114,91 @@ function redirect(string $path): void
     exit;
 }
 
+function app_config(): array
+{
+    static $merged = null;
+    if ($merged !== null) {
+        return $merged;
+    }
+
+    $config = require __DIR__ . '/../config/app.php';
+    try {
+        $settings = new SettingsModel();
+        $name = trim($settings->get('pesantren_name', ''));
+        $address = trim($settings->get('pesantren_address', ''));
+        $logo = trim($settings->get('pesantren_logo', ''));
+        $ndalemRuang = trim($settings->get('ndalem_ruang', ''));
+
+        if ($name !== '') {
+            $config['pesantren_name'] = $name;
+        }
+        if ($address !== '') {
+            $config['pesantren_address'] = $address;
+        }
+        if ($logo !== '') {
+            $config['pesantren_logo'] = $logo;
+        }
+        if ($ndalemRuang !== '') {
+            $config['ndalem_ruang'] = $ndalemRuang;
+        }
+    } catch (Throwable $e) {
+        // Database belum siap (mis. saat install)
+    }
+
+    $merged = $config;
+    return $merged;
+}
+
+function pesantren_has_logo(): bool
+{
+    $app = app_config();
+    return !empty($app['pesantren_logo']);
+}
+
+function save_pesantren_logo(array $file): ?string
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        return null;
+    }
+
+    $config = require __DIR__ . '/../config/app.php';
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $config['allowed_extensions'], true)) {
+        return null;
+    }
+    if (($file['size'] ?? 0) > $config['upload_max_size']) {
+        return null;
+    }
+
+    $dir = __DIR__ . '/../public/assets/img';
+    if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+        return null;
+    }
+
+    foreach (glob($dir . '/pesantren-logo.*') ?: [] as $old) {
+        @unlink($old);
+    }
+
+    $filename = 'pesantren-logo.' . $ext;
+    if (!move_uploaded_file($file['tmp_name'], $dir . '/' . $filename)) {
+        return null;
+    }
+
+    return '/assets/img/' . $filename;
+}
+
+function remove_pesantren_logo_files(): void
+{
+    $dir = __DIR__ . '/../public/assets/img';
+    foreach (glob($dir . '/pesantren-logo.*') ?: [] as $old) {
+        @unlink($old);
+    }
+}
+
 function view(string $name, array $data = []): void
 {
     extract($data);
-    $app = require __DIR__ . '/../config/app.php';
+    $app = app_config();
     require __DIR__ . '/../views/layouts/header.php';
     require __DIR__ . '/../views/' . $name . '.php';
     require __DIR__ . '/../views/layouts/footer.php';

@@ -85,6 +85,7 @@ class SettingsModel
     public function getAllForAdmin(): array
     {
         $keys = [
+            'pesantren_name', 'pesantren_address', 'pesantren_logo',
             'whatsapp_enabled', 'whatsapp_provider', 'whatsapp_token',
             'wa_phone_pengasuh', 'wa_phone_ndalem', 'wa_phone_kantor',
             'wa_enabled_pengasuh', 'wa_enabled_ndalem', 'wa_enabled_kantor',
@@ -98,5 +99,15 @@ class SettingsModel
             $out[$k] = $this->get($k);
         }
         return $out;
+    }
+
+    public function getIdentitySettings(): array
+    {
+        $app = require __DIR__ . '/../config/app.php';
+        return [
+            'pesantren_name' => $this->get('pesantren_name', $app['pesantren_name']),
+            'pesantren_address' => $this->get('pesantren_address', $app['pesantren_address']),
+            'pesantren_logo' => $this->get('pesantren_logo', ''),
+        ];
     }
 }

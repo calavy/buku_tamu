@@ -5,9 +5,13 @@ $user = Auth::user();
 <aside class="sidebar hidden md:flex md:w-64 flex-col fixed h-full z-30">
     <div class="p-6 border-b border-white/10">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                <i data-lucide="shield" class="w-5 h-5 text-gold-400"></i>
-            </div>
+            <?php
+            $brandSize = 'sm';
+            $brandIcon = 'shield';
+            $brandClass = 'bg-white/10 border border-white/10 rounded-xl';
+            $brandMargin = '';
+            require __DIR__ . '/pesantren_brand.php';
+            ?>
             <div>
                 <p class="text-white font-bold text-sm">Pos Keamanan</p>
                 <p class="text-emerald-300/60 text-xs truncate max-w-[140px]"><?= e($app['pesantren_name']) ?></p>
@@ -27,6 +31,9 @@ $user = Auth::user();
         <div class="pt-3 pb-1 px-3">
             <p class="text-emerald-300/40 text-[10px] font-semibold uppercase tracking-wider">Pengaturan</p>
         </div>
+        <a href="<?= base_url('/admin/pengaturan/identitas') ?>" class="sidebar-link <?= $adminPage === 'identitas' ? 'active' : '' ?>">
+            <i data-lucide="building-2" class="w-4 h-4"></i> Identitas Pesantren
+        </a>
         <a href="<?= base_url('/admin/pengaturan/ndalem') ?>" class="sidebar-link <?= $adminPage === 'ndalem' ? 'active' : '' ?>">
             <i data-lucide="home" class="w-4 h-4"></i> Akun Ndalem
         </a>

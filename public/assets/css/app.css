@@ -409,6 +409,21 @@ body {
 
 @media print { .no-print { display: none !important; } }
 
+/* Logo pesantren — tampil penuh, proporsi asli */
+.pesantren-logo {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+.pesantren-logo--sm { max-height: 2.5rem; }
+.pesantren-logo--md { max-height: 3.5rem; }
+.pesantren-logo--lg { max-height: 5.5rem; }
+.pesantren-logo--xl { max-height: 4.5rem; }
+.pesantren-logo--hero { max-height: 8rem; }
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }

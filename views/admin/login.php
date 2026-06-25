@@ -4,9 +4,12 @@
     <!-- Brand Panel -->
     <div class="hidden lg:flex lg:w-1/2 login-brand items-center justify-center p-12">
         <div class="relative z-10 text-white max-w-md">
-            <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center mb-6">
-                <i data-lucide="shield" class="w-8 h-8 text-gold-400"></i>
-            </div>
+            <?php
+            $brandSize = 'xl';
+            $brandIcon = 'shield';
+            $brandClass = 'mb-6';
+            require __DIR__ . '/../partials/pesantren_brand.php';
+            ?>
             <h1 class="font-display text-4xl font-bold mb-3">Pos Keamanan</h1>
             <p class="text-emerald-100/80 text-lg leading-relaxed"><?= e($app['pesantren_name']) ?></p>
             <div class="mt-8 space-y-3">
@@ -27,9 +30,14 @@
     <div class="flex-1 flex items-center justify-center bg-pattern px-4 py-12">
         <div class="max-w-md w-full animate-fade-up">
             <div class="lg:hidden text-center mb-8">
-                <div class="inline-flex w-14 h-14 rounded-2xl bg-pesantren-700 items-center justify-center mb-3">
-                    <i data-lucide="shield" class="w-7 h-7 text-white"></i>
-                </div>
+                <?php
+                $brandSize = 'md';
+                $brandIcon = 'shield';
+                $brandClass = 'bg-pesantren-700 rounded-2xl';
+                $brandMargin = 'mb-3';
+                $brandIconClass = 'text-white';
+                require __DIR__ . '/../partials/pesantren_brand.php';
+                ?>
                 <h1 class="font-display text-2xl font-bold text-gray-800">Pos Keamanan</h1>
             </div>
 

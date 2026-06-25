@@ -45,7 +45,7 @@ class WhatsAppService
         if (!$this->settings->isTruthy('wa_on_approve_guest')) {
             return false;
         }
-        $app = require __DIR__ . '/../config/app.php';
+        $app = app_config();
         $ruang = $this->settings->get('ndalem_ruang', $app['ndalem_ruang'] ?? 'Ruang Tunggu Ndalem');
         $message = sprintf(
             "Yth. %s, silaturahmi Anda telah disetujui. Silakan menuju %s. Terima kasih.\n\n— %s",
@@ -62,7 +62,7 @@ class WhatsAppService
         if (!$this->settings->isTruthy('wa_on_register_guest')) {
             return false;
         }
-        $app = require __DIR__ . '/../config/app.php';
+        $app = app_config();
         $antrean = str_pad($visitor['queue_number'], 3, '0', STR_PAD_LEFT);
         $waktu = visitor_waktu_label($visitor);
         $tujuan = tujuan_label($visitor['tujuan_kunjungan']);
@@ -187,7 +187,7 @@ class WhatsAppService
 
     private function buildStaffMessage(string $event, array $visitor, string $role): string
     {
-        $app = require __DIR__ . '/../config/app.php';
+        $app = app_config();
         $areaLabel = ($visitor['area_masuk'] ?? '') === 'ndalem' ? 'Ndalem (Sowan)' : 'Pesantren';
         $tujuan = tujuan_label($visitor['tujuan_kunjungan']);
         $waktu = visitor_waktu_label($visitor);

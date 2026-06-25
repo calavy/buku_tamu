@@ -4,10 +4,16 @@
     <!-- Hero Header -->
     <header class="bg-hero text-white pt-10 pb-16 px-4 relative">
         <div class="max-w-lg mx-auto text-center relative z-10 animate-fade-up">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 backdrop-blur border border-white/20 mb-4 shadow-lg">
-                <i data-lucide="book-open" class="w-10 h-10 text-gold-400"></i>
-            </div>
+            <?php
+            $brandSize = 'hero';
+            $brandIcon = 'book-open';
+            $brandMargin = 'mb-4';
+            require __DIR__ . '/../partials/pesantren_brand.php';
+            ?>
             <h1 class="font-display text-2xl md:text-3xl font-bold tracking-tight"><?= e($app['pesantren_name']) ?></h1>
+            <?php if (!empty($app['pesantren_address'])): ?>
+            <p class="text-emerald-100/80 text-xs mt-1"><?= e($app['pesantren_address']) ?></p>
+            <?php endif; ?>
             <p class="text-emerald-100/90 text-sm mt-2 font-medium">Buku Tamu Digital</p>
             <div class="inline-flex items-center gap-2 mt-4 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur text-xs text-emerald-100 border border-white/10">
                 <i data-lucide="calendar" class="w-3.5 h-3.5"></i>

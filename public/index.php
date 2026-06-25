@@ -334,6 +334,47 @@ if (preg_match('#^/admin/pengaturan/ndalem/hapus/(\d+)$#', $uri, $m) && $method 
     redirect('/admin/pengaturan/ndalem?success=' . urlencode('Akun ndalem berhasil dihapus.'));
 }
 
+if ($uri === '/admin/pengaturan/identitas' && $method === 'GET') {
+    Auth::requireRole('admin');
+    view('admin/identitas', [
+        'settings' => $settingsModel->getIdentitySettings(),
+        'success' => $_GET['success'] ?? null,
+        'error' => $_GET['error'] ?? null,
+    ]);
+    exit;
+}
+
+if ($uri === '/admin/pengaturan/identitas' && $method === 'POST') {
+    Auth::requireRole('admin');
+    $name = trim($_POST['pesantren_name'] ?? '');
+    if ($name === '') {
+        redirect('/admin/pengaturan/identitas?error=' . urlencode('Nama pesantren wajib diisi.'));
+    }
+
+    $data = [
+        'pesantren_name' => $name,
+        'pesantren_address' => trim($_POST['pesantren_address'] ?? ''),
+    ];
+
+    $currentLogo = $settingsModel->get('pesantren_logo', '');
+
+    if (!empty($_POST['remove_logo'])) {
+        remove_pesantren_logo_files();
+        $data['pesantren_logo'] = '';
+    } elseif (!empty($_FILES['pesantren_logo']['name'])) {
+        $logoPath = save_pesantren_logo($_FILES['pesantren_logo']);
+        if ($logoPath === null) {
+            redirect('/admin/pengaturan/identitas?error=' . urlencode('Logo gagal diunggah. Gunakan JPG/PNG/WebP maks. 5 MB.'));
+        }
+        $data['pesantren_logo'] = $logoPath;
+    } elseif ($currentLogo !== '') {
+        $data['pesantren_logo'] = $currentLogo;
+    }
+
+    $settingsModel->setMany($data);
+    redirect('/admin/pengaturan/identitas?success=' . urlencode('Identitas pesantren berhasil disimpan.'));
+}
+
 if ($uri === '/admin/pengaturan/whatsapp' && $method === 'GET') {
     Auth::requireRole('admin');
     view('admin/whatsapp_settings', [
