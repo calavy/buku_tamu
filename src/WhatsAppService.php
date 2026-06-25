@@ -39,21 +39,48 @@ class WhatsAppService
         return $success;
     }
 
-    /** Notifikasi ke tamu saat sowan disetujui */
-    public function notifyGuestApproval(array $visitor): bool
+    /** Notifikasi ke tamu: jadwal temu ditetapkan petugas/pengasuh */
+    public function notifyGuestWaktuTemui(array $visitor): bool
     {
         if (!$this->settings->isTruthy('wa_on_approve_guest')) {
             return false;
         }
+        if (trim($visitor['no_hp'] ?? '') === '') {
+            return false;
+        }
+        if (empty($visitor['waktu_temu'])) {
+            return false;
+        }
+
         $app = app_config();
-        $ruang = $this->settings->get('ndalem_ruang', $app['ndalem_ruang'] ?? 'Ruang Tunggu Ndalem');
-        $message = sprintf(
-            "Yth. %s, silaturahmi Anda telah disetujui. Silakan menuju %s. Terima kasih.\n\n— %s",
-            $visitor['nama_lengkap'],
-            $ruang,
-            $app['pesantren_name']
-        );
-        return $this->send($visitor['no_hp'], $message, (int) $visitor['id'], 'tamu');
+        $antrean = str_pad((string) $visitor['queue_number'], 3, '0', STR_PAD_LEFT);
+        $waktu = format_waktu_temu_display($visitor['waktu_temu']);
+        $tujuan = tujuan_label($visitor['tujuan_kunjungan']);
+        $lokasi = visitor_lokasi_temu($visitor);
+
+        $lines = [
+            '📅 *Jadwal Pertemuan*',
+            "— {$app['pesantren_name']}",
+            '',
+            "Yth. {$visitor['nama_lengkap']},",
+            '',
+            'Anda akan ditemui petugas/pengasuh pada:',
+            "🕐 *{$waktu}*",
+            "Tujuan: {$tujuan}",
+            "Lokasi: {$lokasi}",
+            "Antrean: *#{$antrean}*",
+            '',
+            'Mohon hadir tepat waktu dan tunjukkan tiket/antrean ke petugas.',
+            'Terima kasih.',
+        ];
+
+        return $this->send($visitor['no_hp'], implode("\n", $lines), (int) $visitor['id'], 'tamu');
+    }
+
+    /** @deprecated use notifyGuestWaktuTemui */
+    public function notifyGuestApproval(array $visitor): bool
+    {
+        return $this->notifyGuestWaktuTemui($visitor);
     }
 
     /** Konfirmasi WA ke tamu segera setelah daftar */
@@ -112,11 +139,11 @@ class WhatsAppService
         ];
     }
 
-    /** Kirim notifikasi segera saat sowan disetujui */
+    /** Kirim notifikasi segera saat sowan disetujui + jadwal temu */
     public function dispatchOnApprove(array $visitor): bool
     {
         $this->processScheduledReminders();
-        return $this->notifyGuestApproval($visitor);
+        return $this->notifyGuestWaktuTemui($visitor);
     }
 
     /** Notifikasi staff saat tamu daftar / check-in / jadwal */
@@ -220,7 +247,7 @@ class WhatsAppService
             "Antrean: #{$antrean}",
             "Asal: {$visitor['asal']}",
             "Rombongan: " . ($app['rombongan_options'][$visitor['jumlah_rombongan']] ?? $visitor['jumlah_rombongan']),
-            "HP Tamu: {$visitor['no_hp']}",
+            "HP Tamu: " . (trim($visitor['no_hp'] ?? '') !== '' ? $visitor['no_hp'] : '-'),
         ];
 
         if (!empty($visitor['detail_keperluan'])) {

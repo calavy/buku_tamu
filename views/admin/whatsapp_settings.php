@@ -113,7 +113,7 @@ $s = $settings;
                         <label class="flex items-center gap-3 cursor-pointer">
                             <input type="checkbox" name="wa_on_approve_guest" value="1"
                                    <?= ($s['wa_on_approve_guest'] ?? '1') === '1' ? 'checked' : '' ?> class="w-5 h-5 rounded text-pesantren-600">
-                            <span class="text-sm">Kirim WA ke <strong>tamu</strong> segera saat sowan disetujui ndalem</span>
+                            <span class="text-sm">Kirim WA ke <strong>tamu</strong> saat jadwal temu ditetapkan (berisi waktu & lokasi pertemuan)</span>
                         </label>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">Pengingat jadwal (menit sebelum waktu kunjungan)</label>

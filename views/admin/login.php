@@ -5,9 +5,9 @@
     <div class="hidden lg:flex lg:w-1/2 login-brand items-center justify-center p-12">
         <div class="relative z-10 text-white max-w-md">
             <?php
-            $brandSize = 'xl';
+            $brandSize = 'lg';
             $brandIcon = 'shield';
-            $brandClass = 'mb-6';
+            $brandMargin = 'mb-6';
             require __DIR__ . '/../partials/pesantren_brand.php';
             ?>
             <h1 class="font-display text-4xl font-bold mb-3">Pos Keamanan</h1>

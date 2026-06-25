@@ -229,6 +229,12 @@ class VisitorModel
         return $stmt->execute($params);
     }
 
+    public function setWaktuTemui(int $id, string $waktuTemui): bool
+    {
+        $stmt = $this->db->prepare('UPDATE visitors SET waktu_temu = ? WHERE id = ?');
+        return $stmt->execute([$waktuTemui, $id]);
+    }
+
     public function getStatistics(string $period = 'week'): array
     {
         if ($period === 'month') {

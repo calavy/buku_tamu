@@ -63,13 +63,13 @@ $s = $settings;
                             <div class="w-48 min-h-[8rem] rounded-2xl bg-pesantren-50 border-2 border-dashed border-pesantren-200 flex items-center justify-center p-4">
                                 <?php if (!empty($s['pesantren_logo'])): ?>
                                     <img src="<?= e(base_url($s['pesantren_logo'])) ?>" alt="Logo" id="logoPreview"
-                                         class="pesantren-logo pesantren-logo--hero w-full">
+                                         class="pesantren-logo pesantren-logo--lg">
                                 <?php else: ?>
                                     <div id="logoPreviewPlaceholder" class="text-center text-gray-400">
                                         <i data-lucide="image-off" class="w-8 h-8 mx-auto mb-1 opacity-50"></i>
                                         <span class="text-[10px]">Belum ada logo</span>
                                     </div>
-                                    <img src="" alt="Logo" id="logoPreview" class="pesantren-logo pesantren-logo--hero w-full hidden">
+                                    <img src="" alt="Logo" id="logoPreview" class="pesantren-logo pesantren-logo--lg hidden">
                                 <?php endif; ?>
                             </div>
                         </div>

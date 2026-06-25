@@ -25,9 +25,9 @@ $scanUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : '
         <div class="card overflow-hidden shadow-2xl">
             <!-- Header -->
             <div class="bg-hero text-white text-center py-10 px-8 relative">
-                <div class="relative z-10">
+                <div class="relative z-10 qr-poster-brand">
                     <?php
-                    $brandSize = 'lg';
+                    $brandSize = 'md';
                     $brandIcon = 'book-open';
                     $brandMargin = 'mb-4';
                     require __DIR__ . '/../views/partials/pesantren_brand.php';

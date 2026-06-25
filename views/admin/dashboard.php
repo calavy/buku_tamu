@@ -24,6 +24,12 @@ $mobileTitle = 'Dasbor';
                 </div>
             </div>
 
+            <?php if (!empty($error)): ?>
+            <div class="card bg-red-50 border-red-200 text-red-800 px-4 py-3 mb-4 text-sm flex items-center gap-2 animate-fade-up">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i><?= e($error) ?>
+            </div>
+            <?php endif; ?>
+
             <!-- Stats -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="stat-card animate-fade-up animate-delay-1">
@@ -108,7 +114,13 @@ $mobileTitle = 'Dasbor';
                                 <td>
                                     <div class="flex gap-1.5 flex-wrap">
                                         <?php if ($v['status'] === 'pending'): ?>
-                                        <form method="POST" action="<?= base_url('/admin/checkin/' . $v['id']) ?>">
+                                        <form method="POST" action="<?= base_url('/admin/checkin/' . $v['id']) ?>" class="flex flex-wrap items-center gap-1.5">
+                                            <?php if (trim($v['no_hp'] ?? '') !== '' && $v['tujuan_kunjungan'] !== 'sowan'): ?>
+                                            <input type="datetime-local" name="waktu_temu" required
+                                                   value="<?= date('Y-m-d\TH:i', strtotime('+1 hour')) ?>"
+                                                   class="text-[10px] border border-gray-200 rounded-lg px-2 py-1.5"
+                                                   title="Waktu temu tamu">
+                                            <?php endif; ?>
                                             <button class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition">
                                                 <i data-lucide="log-in" class="w-3 h-3"></i> Check-In
                                             </button>
@@ -161,13 +173,18 @@ $mobileTitle = 'Dasbor';
                                 <td class="text-gray-400 font-mono text-xs"><?= date('H:i', strtotime($v['created_at'])) ?></td>
                                 <td class="font-mono font-bold text-pesantren-600"><?= str_pad($v['queue_number'], 3, '0', STR_PAD_LEFT) ?></td>
                                 <td class="font-medium"><?= e($v['nama_lengkap']) ?></td>
-                                <td class="text-gray-500"><?= e($v['no_hp']) ?></td>
+                                <td class="text-gray-500"><?= e($v['no_hp'] ?: '-') ?></td>
                                 <td><?= e(tujuan_label($v['tujuan_kunjungan'])) ?></td>
                                 <td><?= status_badge($v['status']) ?></td>
                                 <td>
                                     <div class="flex gap-1">
                                         <?php if ($v['status'] === 'pending'): ?>
-                                        <form method="POST" action="<?= base_url('/admin/checkin/' . $v['id']) ?>">
+                                        <form method="POST" action="<?= base_url('/admin/checkin/' . $v['id']) ?>" class="flex flex-wrap items-center gap-1">
+                                            <?php if (trim($v['no_hp'] ?? '') !== '' && $v['tujuan_kunjungan'] !== 'sowan'): ?>
+                                            <input type="datetime-local" name="waktu_temu" required
+                                                   value="<?= date('Y-m-d\TH:i', strtotime('+1 hour')) ?>"
+                                                   class="text-[10px] border border-gray-200 rounded px-1.5 py-1 w-36">
+                                            <?php endif; ?>
                                             <button class="px-2.5 py-1 bg-blue-600 text-white rounded-lg text-xs">In</button>
                                         </form>
                                         <?php endif; ?>

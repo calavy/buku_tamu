@@ -5,7 +5,7 @@
     <header class="bg-hero text-white pt-10 pb-16 px-4 relative">
         <div class="max-w-lg mx-auto text-center relative z-10 animate-fade-up">
             <?php
-            $brandSize = 'hero';
+            $brandSize = 'lg';
             $brandIcon = 'book-open';
             $brandMargin = 'mb-4';
             require __DIR__ . '/../partials/pesantren_brand.php';
@@ -92,12 +92,12 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">No. HP (WhatsApp) <span class="text-red-400">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">No. HP (WhatsApp) <span class="text-gray-400 font-normal">(opsional)</span></label>
                         <div class="input-wrap">
                             <i data-lucide="phone" class="input-icon w-4 h-4"></i>
-                            <input type="tel" name="no_hp" required
+                            <input type="tel" name="no_hp"
                                    value="<?= e($old['no_hp'] ?? '') ?>"
-                                   placeholder="08xxxxxxxxxx"
+                                   placeholder="08xxxxxxxxxx (jika ada)"
                                    class="input-field">
                         </div>
                     </div>

@@ -418,11 +418,17 @@ body {
     object-fit: contain;
     object-position: center;
 }
-.pesantren-logo--sm { max-height: 2.5rem; }
-.pesantren-logo--md { max-height: 3.5rem; }
-.pesantren-logo--lg { max-height: 5.5rem; }
-.pesantren-logo--xl { max-height: 4.5rem; }
-.pesantren-logo--hero { max-height: 8rem; }
+.pesantren-logo--sm { max-height: 2.25rem; max-width: 4rem; }
+.pesantren-logo--md { max-height: 3rem; max-width: 5.5rem; }
+.pesantren-logo--lg { max-height: 3.5rem; max-width: 6.5rem; }
+.pesantren-logo--xl { max-height: 3.25rem; max-width: 6rem; }
+.pesantren-logo--hero { max-height: 3.75rem; max-width: 7.5rem; }
+
+/* Logo di poster / cetak QR */
+.qr-poster-brand .pesantren-logo {
+    max-height: 3rem;
+    max-width: 5.5rem;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }

@@ -86,7 +86,6 @@ if ($uri === '/submit' && $method === 'POST') {
 
     $errors = [];
     if (empty(trim($_POST['nama_lengkap'] ?? ''))) $errors[] = 'Nama lengkap wajib diisi.';
-    if (empty(trim($_POST['no_hp'] ?? ''))) $errors[] = 'No. HP wajib diisi.';
     if (empty(trim($_POST['asal'] ?? ''))) $errors[] = 'Asal daerah/instansi wajib diisi.';
     if (empty($tujuan)) $errors[] = 'Tujuan kunjungan wajib dipilih.';
     if ($tujuan === 'jenguk' && empty(trim($_POST['nama_santri'] ?? ''))) {
@@ -135,7 +134,7 @@ if ($uri === '/submit' && $method === 'POST') {
 
     $visitor = $visitorModel->create([
         'nama_lengkap' => trim($_POST['nama_lengkap']),
-        'no_hp' => trim($_POST['no_hp']),
+        'no_hp' => trim($_POST['no_hp'] ?? ''),
         'asal' => trim($_POST['asal']),
         'jumlah_rombongan' => $_POST['jumlah_rombongan'] ?? '1',
         'tujuan_kunjungan' => $tujuan,
@@ -190,6 +189,7 @@ if ($uri === '/admin' && $method === 'GET') {
         'visitors' => $visitorModel->getTodayVisitors(),
         'active' => $visitorModel->getActiveInside(),
         'stats' => $stats,
+        'error' => $_GET['error'] ?? null,
     ]);
     exit;
 }
@@ -224,11 +224,25 @@ if (preg_match('#^/admin/checkin/(\d+)$#', $uri, $m) && $method === 'POST') {
     $id = (int) $m[1];
     $visitor = $visitorModel->findById($id);
     if ($visitor && $visitor['status'] === 'pending') {
-        $newStatus = $visitor['tujuan_kunjungan'] === 'sowan' ? 'in_queue' : 'checked_in';
+        $waktuTemui = parse_waktu_temu_input($_POST['waktu_temu'] ?? '');
+        $hasHp = trim($visitor['no_hp'] ?? '') !== '';
+        $isSowan = $visitor['tujuan_kunjungan'] === 'sowan';
+
+        if ($hasHp && !$isSowan && !$waktuTemui) {
+            redirect('/admin?error=' . urlencode('Isi waktu temu tamu untuk mengirim notifikasi WA.'));
+        }
+
+        $newStatus = $isSowan ? 'in_queue' : 'checked_in';
         $visitorModel->updateStatus($id, $newStatus);
+        if ($waktuTemui) {
+            $visitorModel->setWaktuTemui($id, $waktuTemui);
+        }
         $visitor = $visitorModel->findById($id);
         if ($visitor) {
             $whatsapp->dispatchOnCheckin($visitor);
+            if ($waktuTemui && $visitor['tujuan_kunjungan'] !== 'sowan') {
+                $whatsapp->notifyGuestWaktuTemui($visitor);
+            }
         }
     }
     redirect('/admin');
@@ -496,6 +510,8 @@ if ($uri === '/ndalem' && $method === 'GET') {
         'summary' => $visitorModel->getNdalemRecapSummary(),
         'pengasuh' => $pengasuhModel->getCurrent(),
         'pengasuhModel' => $pengasuhModel,
+        'success' => $_GET['success'] ?? null,
+        'error' => $_GET['error'] ?? null,
     ]);
     exit;
 }
@@ -556,7 +572,12 @@ if (preg_match('#^/ndalem/approve/(\d+)$#', $uri, $m) && $method === 'POST') {
     $id = (int) $m[1];
     $visitor = $visitorModel->findById($id);
     if ($visitor) {
+        $waktuTemui = parse_waktu_temu_input($_POST['waktu_temu'] ?? '');
+        if (!$waktuTemui) {
+            redirect('/ndalem?error=' . urlencode('Waktu temu wajib diisi saat menyetujui tamu.'));
+        }
         $visitorModel->updateStatus($id, 'approved', $user['id']);
+        $visitorModel->setWaktuTemui($id, $waktuTemui);
         $visitor = $visitorModel->findById($id);
         if ($visitor) {
             $whatsapp->dispatchOnApprove($visitor);
@@ -564,7 +585,7 @@ if (preg_match('#^/ndalem/approve/(\d+)$#', $uri, $m) && $method === 'POST') {
             $db->prepare('UPDATE visitors SET whatsapp_sent = 1 WHERE id = ?')->execute([$id]);
         }
     }
-    redirect('/ndalem');
+    redirect('/ndalem?success=' . urlencode('Tamu disetujui. WA jadwal temu dikirim jika nomor HP tersedia.'));
 }
 
 if (preg_match('#^/ndalem/call/(\d+)$#', $uri, $m) && $method === 'POST') {

@@ -10,18 +10,18 @@ $brandImgClass = $brandImgClass ?? '';
 $brandMargin = $brandMargin ?? 'mb-4';
 
 $iconBoxSizes = [
-    'sm' => 'w-10 h-10 rounded-xl',
-    'md' => 'w-14 h-14 rounded-2xl',
-    'lg' => 'w-20 h-20 rounded-2xl',
-    'xl' => 'w-16 h-16 rounded-2xl',
-    'hero' => 'w-20 h-20 rounded-2xl',
+    'sm' => 'w-9 h-9 rounded-xl',
+    'md' => 'w-12 h-12 rounded-2xl',
+    'lg' => 'w-14 h-14 rounded-2xl',
+    'xl' => 'w-12 h-12 rounded-2xl',
+    'hero' => 'w-16 h-16 rounded-2xl',
 ];
 $iconSizes = [
-    'sm' => 'w-5 h-5',
-    'md' => 'w-7 h-7',
-    'lg' => 'w-10 h-10',
-    'xl' => 'w-8 h-8',
-    'hero' => 'w-10 h-10',
+    'sm' => 'w-4 h-4',
+    'md' => 'w-6 h-6',
+    'lg' => 'w-7 h-7',
+    'xl' => 'w-6 h-6',
+    'hero' => 'w-8 h-8',
 ];
 $logoSizes = [
     'sm' => 'pesantren-logo pesantren-logo--sm',
@@ -38,7 +38,7 @@ $brandIconClass = $brandIconClass ?? 'text-gold-400';
 $logo = $app['pesantren_logo'] ?? '';
 ?>
 <?php if ($logo): ?>
-<div class="<?= e($brandMargin) ?> <?= e($brandClass) ?> flex justify-center items-center">
+<div class="<?= e($brandMargin) ?> flex justify-center items-center">
     <img src="<?= e(base_url($logo)) ?>" alt="Logo <?= e($app['pesantren_name']) ?>"
          class="<?= e($logoClass) ?> <?= e($brandImgClass) ?>">
 </div>

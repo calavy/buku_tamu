@@ -52,9 +52,9 @@ $scanUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : '
                     <div class="bg-hero text-white text-center py-8 px-6 relative">
                         <div class="relative z-10">
                             <?php
-                            $brandSize = 'lg';
+                            $brandSize = 'md';
                             $brandIcon = 'book-open';
-                            $brandMargin = 'mb-3 mx-auto';
+                            $brandMargin = 'mb-3';
                             require __DIR__ . '/../partials/pesantren_brand.php';
                             ?>
                             <h1 class="font-display text-2xl font-bold print-title"><?= e($app['pesantren_name']) ?></h1>
@@ -91,6 +91,9 @@ $scanUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : '
 .print-area.size-small .qr-img { width: 140px; height: 140px; }
 .print-area.size-small .print-title { font-size: 1rem; }
 .print-area.size-small h2 { font-size: 0.875rem; }
+.print-area.size-poster .pesantren-logo { max-height: 3rem; max-width: 5.5rem; }
+.print-area.size-medium .pesantren-logo { max-height: 2.75rem; max-width: 5rem; }
+.print-area.size-small .pesantren-logo { max-height: 2.5rem; max-width: 4.5rem; }
 @media print {
     body * { visibility: hidden; }
     .print-area-wrapper, .print-area-wrapper * { visibility: visible; }

@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS visitors (
     foto_path VARCHAR(255) DEFAULT NULL,
     jenis_kedatangan ENUM('sekarang', 'jadwal') NOT NULL DEFAULT 'sekarang',
     jadwal_kunjungan DATETIME DEFAULT NULL,
+    waktu_temu DATETIME DEFAULT NULL,
     area_masuk ENUM('pesantren', 'ndalem') NOT NULL DEFAULT 'pesantren',
     status ENUM('pending', 'checked_in', 'in_queue', 'approved', 'called', 'completed', 'checked_out', 'rejected') NOT NULL DEFAULT 'pending',
     hijri_date VARCHAR(50) DEFAULT NULL,

@@ -46,6 +46,17 @@ $mobileTitle = 'Antrean Sowan';
                 </a>
             </div>
 
+            <?php if (!empty($success)): ?>
+            <div class="card bg-emerald-50 border-emerald-200 text-emerald-800 px-4 py-3 mb-4 text-sm flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4"></i><?= e($success) ?>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($error)): ?>
+            <div class="card bg-red-50 border-red-200 text-red-800 px-4 py-3 mb-4 text-sm flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i><?= e($error) ?>
+            </div>
+            <?php endif; ?>
+
             <!-- Status Control -->
             <div class="card p-6 mb-6 animate-fade-up animate-delay-1">
                 <div class="flex items-center gap-2 mb-5">
@@ -129,20 +140,35 @@ $mobileTitle = 'Antrean Sowan';
                                 <p class="font-bold text-gray-800 text-lg"><?= e($v['nama_lengkap']) ?></p>
                                 <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-sm text-gray-500">
                                     <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i><?= e($v['asal']) ?></span>
-                                    <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3 h-3"></i><?= e($v['no_hp']) ?></span>
+                                    <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3 h-3"></i><?= e($v['no_hp'] ?: '-') ?></span>
                                 </div>
                                 <?php if ($v['detail_keperluan']): ?>
                                 <p class="text-sm text-gray-600 mt-2 bg-gray-50 rounded-lg px-3 py-2"><?= e($v['detail_keperluan']) ?></p>
+                                <?php endif; ?>
+                                <?php if (!empty($v['waktu_temu'])): ?>
+                                <p class="text-xs text-pesantren-700 mt-2 flex items-center gap-1">
+                                    <i data-lucide="calendar-clock" class="w-3.5 h-3.5"></i>
+                                    Temu: <?= e(format_waktu_temu_display($v['waktu_temu'])) ?>
+                                </p>
                                 <?php endif; ?>
                                 <div class="mt-2"><?= status_badge($v['status']) ?></div>
                             </div>
                         </div>
                         <div class="flex gap-2 flex-wrap lg:flex-col lg:items-stretch">
                             <?php if (in_array($v['status'], ['checked_in', 'in_queue'])): ?>
-                            <form method="POST" action="<?= base_url('/ndalem/approve/' . $v['id']) ?>">
+                            <form method="POST" action="<?= base_url('/ndalem/approve/' . $v['id']) ?>" class="space-y-2 w-full min-w-[12rem]">
+                                <div>
+                                    <label class="block text-[10px] font-medium text-gray-500 mb-1">Waktu temu tamu <span class="text-red-500">*</span></label>
+                                    <input type="datetime-local" name="waktu_temu" required
+                                           value="<?= date('Y-m-d\TH:i', strtotime('+30 minutes')) ?>"
+                                           class="w-full text-xs border border-gray-200 rounded-lg px-2 py-2">
+                                </div>
                                 <button class="btn-primary w-full py-2.5 text-sm rounded-xl">
-                                    <i data-lucide="check" class="w-4 h-4"></i> Setujui + WA
+                                    <i data-lucide="check" class="w-4 h-4"></i> Setujui + Kirim WA
                                 </button>
+                                <?php if (trim($v['no_hp'] ?? '') === ''): ?>
+                                <p class="text-[10px] text-amber-600">Tamu tanpa HP — WA tidak terkirim</p>
+                                <?php endif; ?>
                             </form>
                             <form method="POST" action="<?= base_url('/ndalem/reject/' . $v['id']) ?>">
                                 <button class="w-full py-2.5 text-sm rounded-xl border border-red-200 text-red-600 hover:bg-red-50 font-medium transition">

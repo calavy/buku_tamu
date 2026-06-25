@@ -311,6 +311,44 @@ function visitor_waktu_label(array $visitor): string
     return 'Sekarang (harian ini)';
 }
 
+function parse_waktu_temu_input(?string $raw): ?string
+{
+    $raw = trim(str_replace('T', ' ', $raw ?? ''));
+    if ($raw === '') {
+        return null;
+    }
+    if (strlen($raw) === 16) {
+        $raw .= ':00';
+    }
+    $ts = strtotime($raw);
+    if ($ts === false) {
+        return null;
+    }
+    return date('Y-m-d H:i:s', $ts);
+}
+
+function format_waktu_temu_display(?string $datetime): string
+{
+    if (empty($datetime)) {
+        return '-';
+    }
+    $ts = strtotime($datetime);
+    if ($ts === false) {
+        return '-';
+    }
+    return date('d F Y', $ts) . ' pukul ' . date('H:i', $ts) . ' WIB';
+}
+
+function visitor_lokasi_temu(array $visitor): string
+{
+    $settings = new SettingsModel();
+    $app = app_config();
+    if (($visitor['area_masuk'] ?? '') === 'ndalem' || ($visitor['tujuan_kunjungan'] ?? '') === 'sowan') {
+        return $settings->get('ndalem_ruang', $app['ndalem_ruang'] ?? 'Ruang Tunggu Ndalem');
+    }
+    return 'Kantor Pesantren';
+}
+
 function kedatangan_badge(array $visitor): string
 {
     if (($visitor['jenis_kedatangan'] ?? 'sekarang') === 'jadwal' && !empty($visitor['jadwal_kunjungan'])) {
